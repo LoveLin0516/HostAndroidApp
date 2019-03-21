@@ -71,6 +71,7 @@ class ContainerActivity : AppCompatActivity() {
         listeners[0] = FlutterView.FirstFrameListener {
             mFlutterLayout.visibility = View.VISIBLE
         }
+
         flutterView.addFirstFrameListener(listeners[0])
 
         MethodChannel(flutterView, CHANNEL_NAME).setMethodCallHandler(object : MethodChannel.MethodCallHandler {
