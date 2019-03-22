@@ -4,7 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+boolean isDartDebug = false
+
 android {
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.hostapp"
@@ -22,8 +25,33 @@ android {
             abiFilters "armeabi-v7a", "x86" // objectbox 不支持armeabi
         }
     }
-    buildTypes {
+
+    signingConfigs {
         release {
+            keyAlias 'aliasKey'
+            keyPassword 'qwerty@168'
+            storeFile file('E:/kestore/HostApp.jks')
+            storePassword 'qwerty@168'
+        }
+    }
+
+    buildTypes {
+        dartDebug {
+            isDartDebug = true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            isDartDebug = false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            isDartDebug = false
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -37,15 +65,21 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+
+    repositories { flatDir { dirs 'libs' } }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation project(':flutter')
+    if (isDartDebug) {
+        implementation project(':flutter')
+    } else {
+        implementation(name: 'flutter-release', ext: 'aar')
+    }
 }
