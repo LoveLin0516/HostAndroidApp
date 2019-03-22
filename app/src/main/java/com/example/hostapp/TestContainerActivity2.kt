@@ -1,22 +1,22 @@
 package com.example.hostapp
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.FrameLayout
+import io.flutter.app.FlutterActivity
+import io.flutter.app.FlutterFragmentActivity
 import io.flutter.facade.Flutter
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.view.FlutterMain
 import io.flutter.view.FlutterView
 
 /**
  * Created by Yagami3zZ hiqlong@163.com on 2019/3/21 0021.
- * Description: 继承自AppCompatActivity，但用的是
- *     自主生成FlutterView的方式，存在的问题就是无法监听回退键
- *     @style/AppThemeNoActionBar 这个设置没有问题
+ * Description: 继承自FlutterActivity 没法自定义FlutterView
  */
-class TestContainerActivity1 : AppCompatActivity() {
+class TestContainerActivity2 : FlutterActivity() {
 
     companion object {
         const val CHANNEL_NAME = "com.example.native.data"
@@ -46,42 +46,24 @@ class TestContainerActivity1 : AppCompatActivity() {
 
     private lateinit var mFlutterLayout: FrameLayout
 
-    private lateinit var mFlutterView: FlutterView
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //最好是继承FlutterApplicaiton
         FlutterMain.startInitialization(getApplicationContext())
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_container)
+        GeneratedPluginRegistrant.registerWith(this)
 
         routeData = intent.getStringExtra(ROUTE_DATA)
 
-        mFlutterLayout = findViewById(R.id.container)
 
-        mFlutterLayout.removeAllViews()
+//        val listeners = arrayOfNulls<FlutterView.FirstFrameListener>(1)
+//        listeners[0] = FlutterView.FirstFrameListener {
+//            mFlutterLayout.visibility = View.VISIBLE
+//        }
+//
+//        flutterView.addFirstFrameListener(listeners[0])
 
-        mFlutterView = Flutter.createView(
-            this@TestContainerActivity1,
-            lifecycle,
-            routeData
-        )
-
-        val layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-        )
-        mFlutterLayout.addView(mFlutterView, layoutParams)
-
-        val listeners = arrayOfNulls<FlutterView.FirstFrameListener>(1)
-        listeners[0] = FlutterView.FirstFrameListener {
-            mFlutterLayout.visibility = View.VISIBLE
-        }
-
-        mFlutterView.addFirstFrameListener(listeners[0])
-
-        MethodChannel(mFlutterView, CHANNEL_NAME).setMethodCallHandler(object : MethodChannel.MethodCallHandler {
+        MethodChannel(flutterView, CHANNEL_NAME).setMethodCallHandler(object : MethodChannel.MethodCallHandler {
             override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
                 if (call.method!!.contentEquals("getNativeData")) {
                     result.success(getNativeData())

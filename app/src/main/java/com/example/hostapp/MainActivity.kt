@@ -102,8 +102,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun jumpTo(routeData: String) {
         val intent = Intent()
-        intent.putExtra(ContainerActivity.ROUTE_DATA, routeData)
-        intent.setClass(this@MainActivity, ContainerActivity::class.java)
+        intent.action = Intent.ACTION_RUN
+        intent.putExtra(TestContainerActivity2.ROUTE_DATA, routeData)
+        intent.setClass(this@MainActivity, TestContainerActivity2::class.java)
         startActivity(intent)
     }
 

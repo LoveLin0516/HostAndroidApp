@@ -7,18 +7,21 @@ import io.flutter.app.FlutterFragmentActivity
 import io.flutter.facade.Flutter
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.view.FlutterMain
 import io.flutter.view.FlutterView
 
 /**
  * Created by Yagami3zZ hiqlong@163.com on 2019/3/21 0021.
- * Description:
+ * Description:  虽然是继承自FlutterFragmentActivity，但是采用的是
+ *     自主生成FlutterView的方式，存在的问题就是无法监听回退键
+ *     而且@style/AppThemeNoActionBar 这个设置貌似有点问题
  */
 class ContainerActivity : FlutterFragmentActivity() {
 
     companion object {
         const val CHANNEL_NAME = "com.example.native.data"
-        const val ROUTE_DATA = "route_data"
+        const val ROUTE_DATA = "route"
         const val NATIVE_DATA = "[\n" +
                 "  {\n" +
                 "    \"userId\": 1,\n" +
@@ -53,6 +56,7 @@ class ContainerActivity : FlutterFragmentActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
+        GeneratedPluginRegistrant.registerWith(this)
 
         routeData = intent.getStringExtra(ROUTE_DATA)
 
@@ -70,17 +74,17 @@ class ContainerActivity : FlutterFragmentActivity() {
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT
         )
-        mFlutterLayout.addView(flutterView, layoutParams)
-        flutterView.setInitialRoute(routeData)
+
+        mFlutterLayout.addView(mFlutterView, layoutParams)
 
         val listeners = arrayOfNulls<FlutterView.FirstFrameListener>(1)
         listeners[0] = FlutterView.FirstFrameListener {
             mFlutterLayout.visibility = View.VISIBLE
         }
 
-        flutterView.addFirstFrameListener(listeners[0])
+        mFlutterView.addFirstFrameListener(listeners[0])
 
-        MethodChannel(flutterView, CHANNEL_NAME).setMethodCallHandler(object : MethodChannel.MethodCallHandler {
+        MethodChannel(mFlutterView, CHANNEL_NAME).setMethodCallHandler(object : MethodChannel.MethodCallHandler {
             override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
                 if (call.method!!.contentEquals("getNativeData")) {
                     result.success(getNativeData())
