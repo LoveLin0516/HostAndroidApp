@@ -20,6 +20,9 @@
         <activity android:name=".ContainerActivity"
                   android:theme="@style/AppThemeNoActionBar">
         </activity>
+        <activity android:name=".TestContainerActivity1"
+                  android:theme="@style/AppThemeNoActionBar">
+        </activity>
     </application>
 
 </manifest>

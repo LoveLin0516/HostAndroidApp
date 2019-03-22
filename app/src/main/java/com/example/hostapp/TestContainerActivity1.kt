@@ -1,9 +1,9 @@
 package com.example.hostapp
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.FrameLayout
-import io.flutter.app.FlutterFragmentActivity
 import io.flutter.facade.Flutter
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -14,7 +14,7 @@ import io.flutter.view.FlutterView
  * Created by Yagami3zZ hiqlong@163.com on 2019/3/21 0021.
  * Description:
  */
-class ContainerActivity : FlutterFragmentActivity() {
+class TestContainerActivity1 : AppCompatActivity() {
 
     companion object {
         const val CHANNEL_NAME = "com.example.native.data"
@@ -61,7 +61,7 @@ class ContainerActivity : FlutterFragmentActivity() {
         mFlutterLayout.removeAllViews()
 
         mFlutterView = Flutter.createView(
-            this@ContainerActivity,
+            this@TestContainerActivity1,
             lifecycle,
             routeData
         )
@@ -70,27 +70,22 @@ class ContainerActivity : FlutterFragmentActivity() {
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT
         )
-        mFlutterLayout.addView(flutterView, layoutParams)
-        flutterView.setInitialRoute(routeData)
+        mFlutterLayout.addView(mFlutterView, layoutParams)
 
         val listeners = arrayOfNulls<FlutterView.FirstFrameListener>(1)
         listeners[0] = FlutterView.FirstFrameListener {
             mFlutterLayout.visibility = View.VISIBLE
         }
 
-        flutterView.addFirstFrameListener(listeners[0])
+        mFlutterView.addFirstFrameListener(listeners[0])
 
-        MethodChannel(flutterView, CHANNEL_NAME).setMethodCallHandler(object : MethodChannel.MethodCallHandler {
+        MethodChannel(mFlutterView, CHANNEL_NAME).setMethodCallHandler(object : MethodChannel.MethodCallHandler {
             override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
                 if (call.method!!.contentEquals("getNativeData")) {
                     result.success(getNativeData())
                 }
             }
         })
-    }
-
-    override fun getFlutterView(): FlutterView {
-        return mFlutterView
     }
 
     fun getNativeData() :String{
