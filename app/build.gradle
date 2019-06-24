@@ -45,9 +45,10 @@ android {
     buildTypes {
         dartDebug {
             isDartDebug = true
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            matchingFallbacks = ['release','debug']
         }
 
         debug {
@@ -61,7 +62,6 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
     }
     externalNativeBuild {
@@ -85,9 +85,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    if (isDartDebug) {
-        implementation project(':flutter')
-    } else {
-        implementation(name: 'flutter-release', ext: 'aar')
-    }
+    implementation project(':flutter')
+
 }

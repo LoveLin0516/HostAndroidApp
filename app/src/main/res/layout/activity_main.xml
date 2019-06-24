@@ -33,7 +33,7 @@
 
         <Button
                 android:id="@+id/button2"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -42,7 +42,7 @@
 
         <Button
                 android:id="@+id/button3"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
