@@ -17,13 +17,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".FlutterActivity2"
+                  android:theme="@style/AppThemeNoActionBar">
+        </activity>
         <activity android:name=".ContainerActivity"
                   android:theme="@style/AppThemeNoActionBar">
         </activity>
-        <activity android:name=".TestContainerActivity1"
-                  android:theme="@style/AppThemeNoActionBar">
-        </activity>
-        <activity android:name=".TestContainerActivity2"
+        <activity android:name=".FlutterActivity1"
                   android:theme="@style/AppThemeNoActionBar">
         </activity>
     </application>

@@ -17,7 +17,7 @@ import io.flutter.view.FlutterView
  * Created by Yagami3zZ hiqlong@163.com on 2019/3/21 0021.
  * Description: 继承自FlutterActivity 没法自定义FlutterView
  */
-class TestContainerActivity2 : FlutterActivity() {
+class FlutterActivity1 : BaseFlutterActivity() {
 
     companion object {
 

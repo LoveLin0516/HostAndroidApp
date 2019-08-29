@@ -1,22 +1,23 @@
 package com.example.hostapp
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.FrameLayout
+import io.flutter.app.FlutterFragmentActivity
 import io.flutter.facade.Flutter
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.view.FlutterMain
 import io.flutter.view.FlutterView
 
 /**
  * Created by Yagami3zZ hiqlong@163.com on 2019/3/21 0021.
- * Description: 继承自AppCompatActivity，但用的是
+ * Description:  虽然是继承自FlutterFragmentActivity，但是采用的是
  *     自主生成FlutterView的方式，存在的问题就是无法监听回退键
- *     @style/AppThemeNoActionBar 这个设置没有问题
+ *     而且@style/AppThemeNoActionBar 这个设置貌似有点问题
  */
-class TestContainerActivity1 : AppCompatActivity() {
+class FlutterActivity2 : FlutterFragmentActivity() {
 
     companion object {
         const val CHANNEL_NAME = "com.example.native.data"
@@ -55,6 +56,7 @@ class TestContainerActivity1 : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
+        GeneratedPluginRegistrant.registerWith(this)
 
         routeData = intent.getStringExtra(ROUTE_DATA)
 
@@ -63,7 +65,7 @@ class TestContainerActivity1 : AppCompatActivity() {
         mFlutterLayout.removeAllViews()
 
         mFlutterView = Flutter.createView(
-            this@TestContainerActivity1,
+            this@FlutterActivity2,
             lifecycle,
             routeData
         )
@@ -72,6 +74,7 @@ class TestContainerActivity1 : AppCompatActivity() {
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT
         )
+
         mFlutterLayout.addView(mFlutterView, layoutParams)
 
         val listeners = arrayOfNulls<FlutterView.FirstFrameListener>(1)
@@ -88,6 +91,10 @@ class TestContainerActivity1 : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun getFlutterView(): FlutterView {
+        return mFlutterView
     }
 
     fun getNativeData() :String{

@@ -156,8 +156,8 @@ class MainActivity : AppCompatActivity() {
     private fun jumpTo(routeData: String) {
         val intent = Intent()
         intent.action = Intent.ACTION_RUN
-        intent.putExtra(TestContainerActivity2.ROUTE_DATA, routeData)
-        intent.setClass(this@MainActivity, TestContainerActivity2::class.java)
+        intent.putExtra(FlutterActivity1.ROUTE_DATA, routeData)
+        intent.setClass(this@MainActivity, FlutterActivity1::class.java)
         startActivity(intent)
     }
 
